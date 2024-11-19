@@ -4,4 +4,4 @@ matplotlib
 Pillow
 scipy
 scikit-image
-cupy
+cupy-cuda>=13.2.0
