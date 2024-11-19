@@ -4,4 +4,4 @@ matplotlib
 Pillow
 scipy
 scikit-image
-cupy-cuda12x  # Replace "cuda12x" with your CUDA version (e.g., cupy-cuda11x for CUDA 11.x)
+cupy
