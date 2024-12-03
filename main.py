@@ -3,12 +3,14 @@ import os
 import time
 import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
 import generateForwardProjections as fp
 
-def main():
-    global img_name, img_path, downsample_ratios_list, inplane_offset_ratio, mode
+def main(img_path):
+    global downsample_ratios_list, inplane_offset_ratio, mode
     global outplane_offset_ratio, proj_width, proj_height, n_projections_list
 
+    img_name = os.path.splitext(os.path.basename(img_path))[0]
     img_np = cv2.imread(img_path)
     aspect_ratio = img_np.shape[0]/img_np.shape[1]
     proj_inplane_offset = img_np.shape[1]*inplane_offset_ratio
@@ -38,31 +40,46 @@ def main():
             print(' ')
 
             compiled_tests = np.load(img_path_final + '.npz')['compiled_tests'].astype('int64')
-            compiled_tests[:, :, [0, 2]] = compiled_tests[:, :, [2, 0]]
+            # compiled_tests[:, :, [0, 2]] = compiled_tests[:, :, [2, 0]]
 
-            disp = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
-            disp = (disp*compiled_tests.max()/disp.max()).astype('int64')
+            # disp = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
+            # disp = (disp*compiled_tests.max()/disp.max()).astype('int64')
 
-            disp = disp - compiled_tests
-            disp = (disp/disp.max()).astype('float64')
-       
-            fig, axs = plt.subplots(1, 3, figsize=(15, 5))
-            axs[0].imshow(disp[:,:,0], interpolation='none', cmap='RdBu')
-            axs[1].imshow(disp[:,:,1], interpolation='none', cmap='RdBu')
-            axs[2].imshow(disp[:,:,2], interpolation='none', cmap='RdBu')
-            plt.tight_layout()
-            plt.show()
+            # disp = disp - compiled_tests
+            # disp = (disp/disp.max()).astype('float64')
 
+            disp = (compiled_tests*255/compiled_tests.max()).astype('uint8')
+            disp = cv2.cvtColor(disp, cv2.COLOR_BGR2RGB)
+
+            image = Image.fromarray(disp)
+
+            image = Image.fromarray(disp)
+            image.save(f'output/{img_name}.jpeg')      
+            # fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+            # axs[0].imshow(disp[:,:,0], interpolation='none', cmap='RdBu')
+            # axs[1].imshow(disp[:,:,1], interpolation='none', cmap='RdBu')
+            # axs[2].imshow(disp[:,:,2], interpolation='none', cmap='RdBu')
+            # plt.tight_layout()
+            # plt.show()
+
+def get_files():
+    list=[]
+    cwd = os.getcwd()
+    folder_path = os.path.join(cwd, 'images')
+    for filepath,dirnames,filenames in os.walk(folder_path):
+        for filename in filenames:
+            list.append(os.path.join(filepath,filename))
+    return list
 
 if __name__ == '__main__':
-    img_name = 'Noise(1024)'
-    img_path = 'images/' + img_name + '.jpeg'
-
     downsample_ratios_list = [1]
     n_projections_list = [4]
     inplane_offset_ratio = 0.1/3
     outplane_offset_ratio = 1
-    proj_height = 720//20
-    proj_width = 1280//20
+    proj_height = 720//2
+    proj_width = 1280//2
     mode = 'ave'
-    main()
+
+    img_paths=get_files()
+    for img_path in img_paths:
+        main(img_path)
