@@ -40,27 +40,12 @@ def main(img_path):
             print(' ')
 
             compiled_tests = np.load(img_path_final + '.npz')['compiled_tests'].astype('int64')
-            # compiled_tests[:, :, [0, 2]] = compiled_tests[:, :, [2, 0]]
-
-            # disp = cv2.cvtColor(img_np, cv2.COLOR_BGR2RGB)
-            # disp = (disp*compiled_tests.max()/disp.max()).astype('int64')
-
-            # disp = disp - compiled_tests
-            # disp = (disp/disp.max()).astype('float64')
-
             disp = (compiled_tests*255/compiled_tests.max()).astype('uint8')
             disp = cv2.cvtColor(disp, cv2.COLOR_BGR2RGB)
-
             image = Image.fromarray(disp)
 
-            image = Image.fromarray(disp)
+            os.makedirs("output", exist_ok=True)
             image.save(f'output/{img_name}.jpeg')      
-            # fig, axs = plt.subplots(1, 3, figsize=(15, 5))
-            # axs[0].imshow(disp[:,:,0], interpolation='none', cmap='RdBu')
-            # axs[1].imshow(disp[:,:,1], interpolation='none', cmap='RdBu')
-            # axs[2].imshow(disp[:,:,2], interpolation='none', cmap='RdBu')
-            # plt.tight_layout()
-            # plt.show()
 
 def get_files():
     list=[]
