@@ -37,7 +37,7 @@ def generate(grid_x, grid_y, inplane_offset, outplane_offset, image_height, plot
     vert_offset = outplane_offset/image_height
     closest_offset = np.sqrt(horz_offset**2 + vert_offset**2)
     farthest_offset = np.sqrt((1+horz_offset)**2 + vert_offset**2)
-    offset_angle = np.atan(vert_offset/horz_offset)
+    offset_angle = np.arctan(vert_offset/horz_offset)
     proj_height = (np.sin(np.pi - offset_angle)/(np.cos(np.pi - offset_angle) + farthest_offset - closest_offset))*scale_y/2
 
     # Generate grid points
