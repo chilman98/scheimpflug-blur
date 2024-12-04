@@ -4,4 +4,4 @@ matplotlib
 Pillow
 scipy
 scikit-image
-cupy-cuda12x=13.2.0
+cupy-cuda12x==13.2.0
