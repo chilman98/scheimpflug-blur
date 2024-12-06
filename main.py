@@ -59,10 +59,10 @@ def get_files():
 if __name__ == '__main__':
     downsample_ratios_list = [1]
     n_projections_list = [4]
-    inplane_offset_ratio = 0.1/3
-    outplane_offset_ratio = 1
-    proj_height = 720//2
-    proj_width = 1280//2
+    inplane_offset_ratio = 1/32
+    outplane_offset_ratio = 5/8
+    proj_height = 36
+    proj_width = 64
     mode = 'ave'
 
     img_paths=get_files()
